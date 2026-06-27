@@ -1,4 +1,3 @@
-```react
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Waves, 
@@ -716,5 +715,3 @@ export default function App() {
     </div>
   );
 }
-
-```
