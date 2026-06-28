@@ -42,7 +42,6 @@ const fetchWithRetry = async (url, retries = 5, delay = 1000) => {
 
 // Algoritmo astronómico simplificado de cálculo de coeficientes de marea y fases lunares
 function getMoonAndTideSpecs(date) {
-  // Luna nueva de referencia: 1970-01-07 20:35 UTC
   const knownNewMoon = new Date(Date.UTC(1970, 0, 7, 20, 35, 0));
   const diffMs = date.getTime() - knownNewMoon.getTime();
   const diffDays = diffMs / (1000 * 60 * 60 * 24);
@@ -62,7 +61,6 @@ function getMoonAndTideSpecs(date) {
   else if (ageNormalized < 23.97) { phaseName = "Cuarto Menguante"; icon = "🌗"; }
   else if (ageNormalized < 27.66) { phaseName = "Luna Menguante"; icon = "🌘"; }
 
-  // Coeficiente de marea aproximado para la costa de Cádiz (rango de 25 a 118)
   const angle = (ageNormalized / lunarCycle) * 2 * Math.PI * 2;
   const cosVal = Math.cos(angle); 
   const orbitDeviation = Math.sin(date.getDate() / 2.5) * 6;
@@ -77,7 +75,7 @@ export default function App() {
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [activeDayIndex, setActiveDayIndex] = useState(0);
-  const [heightSystem, setHeightSystem] = useState('puerto'); // 'puerto' (IHM de Cádiz) o 'msl' (Satélite)
+  const [heightSystem, setHeightSystem] = useState('puerto'); // 'puerto' o 'msl'
   const [simulatedHour, setSimulatedHour] = useState(new Date().getHours());
   
   const [daysData, setDaysData] = useState([]); 
@@ -107,7 +105,6 @@ export default function App() {
       const winds = weatherRes.hourly.wind_speed_10m;
       const weatherCodes = weatherRes.hourly.weather_code;
 
-      // Unificación de datos asegurando la hora local de Chipiona
       const unifiedTimeline = times.map((time, idx) => {
         const parts = time.split(/[-TH:]/);
         const localDateObj = new Date(
@@ -119,7 +116,6 @@ export default function App() {
         );
 
         const mslHeight = mslHeights[idx] || 0;
-        // Calibración estándar respecto al Cero del Puerto de Chipiona/Cádiz
         const puertoHeight = mslHeight + 2.1; 
 
         return {
@@ -137,7 +133,6 @@ export default function App() {
         };
       });
 
-      // Detección matemática de Pleamares y Bajamares locales
       const extrema = [];
       const windowSize = 4; 
       
@@ -160,7 +155,6 @@ export default function App() {
         }
       }
 
-      // Estructuración limpia de hoy y los 6 días siguientes
       const processedDays = [];
       const today = new Date();
 
@@ -198,7 +192,6 @@ export default function App() {
 
       setDaysData(processedDays);
 
-      // Estado en tiempo real del mar
       const now = new Date();
       const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
       
@@ -222,11 +215,10 @@ export default function App() {
 
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 300000); // Autorefresh cada 5 min silencioso
+    const interval = setInterval(loadData, 300000); 
     return () => clearInterval(interval);
   }, []);
 
-  // Al cambiar de pestaña, posicionar el slider en la hora actual si es "hoy" o al mediodía para otros días
   useEffect(() => {
     setSimulatedHour(activeDayIndex === 0 ? new Date().getHours() : 12);
   }, [activeDayIndex]);
@@ -249,7 +241,6 @@ export default function App() {
     return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
   };
 
-  // Valoración local de los Corrales de Pesca (Monumento Natural)
   const getCorralesStatus = (day) => {
     if (!day) return null;
     const coeff = day.tideCoefficient;
@@ -261,27 +252,27 @@ export default function App() {
     if (coeff >= 80) {
       return {
         level: 'excelente',
-        bg: 'bg-emerald-50 border-emerald-150',
-        text: 'text-emerald-900',
-        badge: 'bg-emerald-600 text-white',
+        bg: 'bg-white border-l-4 border-l-kelp border-ink/8',
+        accentText: 'text-kelp',
+        badge: 'bg-kelp text-white',
         title: '¡Condiciones excepcionales de vaciante! 🐚',
         desc: `Las mareas vivas dejarán los corrales totalmente secos y transitables. El momento óptimo de acceso seguro es sobre las ${horaBaja}.`
       };
     } else if (coeff >= 65) {
       return {
         level: 'bueno',
-        bg: 'bg-sky-50 border-sky-150',
-        text: 'text-sky-950',
-        badge: 'bg-sky-600 text-white',
+        bg: 'bg-white border-l-4 border-l-marine border-ink/8',
+        accentText: 'text-marine',
+        badge: 'bg-marine text-white',
         title: 'Marea favorable para visitar 👍',
         desc: `El arrecife quedará descubierto. Podrás pasear por el Corral de la Longuera si bajas sobre las ${horaBaja}.`
       };
     } else {
       return {
         level: 'bajo',
-        bg: 'bg-amber-50/70 border-amber-150',
-        text: 'text-amber-950',
-        badge: 'bg-amber-600 text-white',
+        bg: 'bg-white border-l-4 border-l-rust/60 border-ink/8',
+        accentText: 'text-rust',
+        badge: 'bg-rust/80 text-white',
         title: 'Poco expuesto (Marea muerta) ⚠️',
         desc: `Al tener coeficiente bajo, el mar no se retirará lo suficiente para ver los corrales. Es mejor evitar pasear por las piedras hoy.`
       };
@@ -292,20 +283,20 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
-        <Waves className="w-10 h-10 text-slate-800 animate-bounce mb-3" />
-        <h2 className="text-sm font-semibold tracking-wider uppercase text-slate-500">Buscando marea en Chipiona...</h2>
+      <div className="min-h-screen bg-mineral flex flex-col items-center justify-center p-6">
+        <Waves className="w-12 h-12 text-marine animate-pulse mb-4" />
+        <h2 className="text-xs font-bold tracking-widest uppercase text-ink/40 animate-pulse">Buscando marea en Chipiona...</h2>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 text-center">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm max-w-sm">
-          <AlertTriangle className="w-10 h-10 text-rose-500 mx-auto mb-3" />
-          <p className="text-slate-800 text-sm font-medium mb-4">{error}</p>
-          <button onClick={loadData} className="w-full py-2.5 bg-slate-900 text-white text-xs font-semibold rounded-xl">
+      <div className="min-h-screen bg-mineral flex flex-col items-center justify-center p-6 text-center">
+        <div className="bg-white p-8 rounded-xl border border-ink/8 shadow-sm max-w-sm">
+          <AlertTriangle className="w-12 h-12 text-rust mx-auto mb-4" />
+          <p className="text-ink text-sm font-semibold mb-6">{error}</p>
+          <button onClick={loadData} className="w-full py-3 bg-ink text-white text-xs font-bold tracking-wider uppercase rounded-lg hover:bg-ink/90 transition-colors">
             Reintentar Conexión
           </button>
         </div>
@@ -313,7 +304,7 @@ export default function App() {
     );
   }
 
-  // Configuración de la gráfica minimalista
+  // Configuración de la gráfica
   const svgWidth = 600;
   const svgHeight = 160;
   const paddingY = 20;
@@ -334,383 +325,415 @@ export default function App() {
   const fillPath = svgPoints.length > 0 ? `${linePath} L ${svgPoints[svgPoints.length - 1].x} ${svgHeight} L ${svgPoints[0].x} ${svgHeight} Z` : '';
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 antialiased font-sans pb-12">
+    <div className="min-h-screen bg-mineral text-ink font-sans antialiased selection:bg-foam/80 selection:text-ink pb-16">
       
-      {/* HEADER MINIMALISTA - ESTILO EDITORIAL COSTA */}
-      <header className="border-b border-slate-200 bg-white sticky top-0 z-40 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
+      {/* HEADER EDITORIAL */}
+      <header className="border-b border-ink/8 bg-white/80 backdrop-blur-md sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-              <h1 className="text-base font-extrabold tracking-tight uppercase text-slate-900">Costa Chipiona</h1>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 bg-marine rounded-full animate-pulse"></span>
+              <h1 className="text-xl font-black uppercase tracking-tight text-ink">Costa Chipiona</h1>
             </div>
-            <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Tabla de Mareas Oficial</p>
+            <p className="text-[9px] uppercase font-bold tracking-widest text-ink/40 mt-0.5">Estación de Observación Oceanográfica y Mareas</p>
           </div>
           
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">
-              {formatHourString(currentStatus.time)}h
-            </span>
-            <button onClick={loadData} className="p-2 text-slate-500 hover:text-slate-800 transition" aria-label="Actualizar">
-              <RefreshCw className="w-4 h-4" />
-            </button>
+          <div className="flex items-center gap-4 self-start sm:self-auto">
+            <div className="text-right hidden md:block">
+              <p className="text-[9px] font-bold text-ink/40 uppercase">Coordenadas Oficiales</p>
+              <p className="text-xs font-mono font-bold text-ink/75">36.735° N, 6.438° W</p>
+            </div>
+            <div className="h-8 w-px bg-ink/8 hidden md:block"></div>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-mono font-bold text-ink bg-mineral px-3 py-1.5 rounded-md border border-ink/6">
+                Hora Local: {formatHourString(currentStatus.time)}
+              </span>
+              <button 
+                onClick={loadData} 
+                className="p-2 text-ink/50 hover:text-ink hover:bg-mineral rounded-md border border-transparent hover:border-ink/6 transition-all"
+                title="Actualizar datos"
+                aria-label="Actualizar"
+              >
+                <RefreshCw className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* CONTENEDOR MÓVIL ESTRECHO */}
-      <main className="max-w-md mx-auto px-4 py-5 space-y-5">
-        
-        {/* SECCIÓN 1: ESTADO ACTUAL Y DETALLES DE MAREAS DE HOY */}
-        {activeDayIndex === 0 && currentStatus && (
-          <section className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
-            <div className="flex justify-between items-baseline">
-              <span className="text-xs uppercase font-bold tracking-wider text-slate-400">Estado Actual de la Mar</span>
-              <span className="text-[11px] font-bold text-slate-400">Faro de Chipiona</span>
-            </div>
-
-            {/* Métrica principal limpia */}
-            <div className="flex items-end justify-between">
-              <div>
-                <p className="text-5xl font-black tracking-tight text-slate-900">
-                  {(currentStatus.currentPoint[heightSystem === 'puerto' ? 'puertoHeight' : 'mslHeight']).toFixed(2)}
-                  <span className="text-2xl font-semibold text-slate-500 ml-1">m</span>
-                </p>
-                <div className="flex items-center gap-1 mt-1 text-xs font-bold text-slate-600">
-                  {currentStatus.isRising ? (
-                    <span className="flex items-center gap-1 text-emerald-600">
-                      <TrendingUp className="w-3.5 h-3.5" /> Marea Subiendo
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1 text-blue-600">
-                      <TrendingDown className="w-3.5 h-3.5" /> Marea Bajando
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Siguiente hito rápido */}
-              {currentStatus.nextExtremum && (
-                <div className="text-right border-l border-slate-100 pl-4">
-                  <span className="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">
-                    Siguiente {currentStatus.nextExtremum.type}
-                  </span>
-                  <span className="text-base font-extrabold text-slate-900">
-                    {formatHourString(currentStatus.nextExtremum.time)}
-                  </span>
-                  <span className="text-[11px] text-slate-500 block">
-                    {(heightSystem === 'puerto' ? currentStatus.nextExtremum.puertoHeight : currentStatus.nextExtremum.mslHeight).toFixed(2)}m
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Selector de sistema de medición (discreto, no intrusivo) */}
-            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-              <span className="text-slate-400 font-medium">Ajuste de altura:</span>
-              <div className="inline-flex bg-slate-50 p-0.5 rounded-lg border border-slate-200">
-                <button 
-                  onClick={() => setHeightSystem('puerto')} 
-                  className={`px-2 py-0.5 rounded-md font-bold transition ${heightSystem === 'puerto' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
-                >
-                  Cero Puerto
-                </button>
-                <button 
-                  onClick={() => setHeightSystem('msl')} 
-                  className={`px-2 py-0.5 rounded-md font-bold transition ${heightSystem === 'msl' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
-                >
-                  Boya (MSL)
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* DETALLE COMPLETO DEL DÍA EN CURSO O SELECCIONADO */}
-        {activeDay && (
-          <div className="space-y-4">
+      {/* CONTENEDOR PRINCIPAL DUAL MOBILE/DESKTOP */}
+      <main className="max-w-6xl mx-auto px-4 md:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* COLUMNA IZQUIERDA: HERO, GRÁFICO, SLIDER (8 COLUMNAS EN DESKTOP) */}
+          <div className="lg:col-span-8 space-y-6">
             
-            {/* Cabecera del día seleccionado */}
-            <div className="flex justify-between items-center px-1">
-              <div>
-                <p className="text-xs uppercase font-bold tracking-widest text-slate-400">Pronóstico Hidráulico</p>
-                <h2 className="text-lg font-black tracking-tight text-slate-900">
-                  {activeDayIndex === 0 ? "Marea de Hoy" : `Marea del ${formatFriendlyDate(activeDay.date, false)}`}
-                </h2>
-              </div>
-              <div className="flex items-center gap-1 bg-white border border-slate-200 px-3 py-1 rounded-full text-xs font-bold text-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                <span>Coeficiente</span>
-                <span className="text-blue-600 font-black">{activeDay.tideCoefficient}</span>
-              </div>
-            </div>
-
-            {/* GRÁFICA DEL DÍA SELECCIONADO - SIN NEÓN, LIMPIA Y ELEGANTE */}
-            <section className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-4">
-              <div className="relative">
-                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto block">
-                  <defs>
-                    {/* Degradados sutiles y limpios estilo Windy */}
-                    <linearGradient id="softTide" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#2563EB" stopOpacity="0.08" />
-                      <stop offset="100%" stopColor="#2563EB" stopOpacity="0.0" />
-                    </linearGradient>
-                  </defs>
-
-                  {/* Guías horizontales discretas */}
-                  {Array.from({ length: 4 }).map((_, step) => {
-                    const val = minDailyHeight + (heightSpan / 3) * step;
-                    const y = svgHeight - paddingY - (step / 3) * (svgHeight - paddingY * 2);
-                    return (
-                      <g key={step}>
-                        <line x1="0" y1={y} x2={svgWidth} y2={y} className="stroke-slate-100" strokeWidth="1" />
-                        <text x="4" y={y - 4} className="fill-slate-400 text-[10px] font-semibold">{val.toFixed(1)}m</text>
-                      </g>
-                    );
-                  })}
-
-                  {/* Curva de agua y relleno */}
-                  {fillPath && <path d={fillPath} fill="url(#softTide)" />}
-                  {linePath && <path d={linePath} fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" />}
-
-                  {/* Hitos: Pleamares y Bajamares */}
-                  {activeDay.extrema.map((ext, idx) => {
-                    const val = heightSystem === 'puerto' ? ext.puertoHeight : ext.mslHeight;
-                    const x = (ext.time.getHours() / 23) * svgWidth;
-                    const y = svgHeight - paddingY - ((val - minDailyHeight) / heightSpan) * (svgHeight - paddingY * 2);
-                    const isPlea = ext.type === 'Pleamar';
-
-                    return (
-                      <g key={idx}>
-                        <circle cx={x} cy={y} r="4.5" className={`${isPlea ? 'fill-emerald-500' : 'fill-blue-500'} stroke-white`} strokeWidth="1.5" />
-                        <text 
-                          x={x} 
-                          y={isPlea ? y - 10 : y + 18} 
-                          textAnchor="middle" 
-                          className="fill-slate-800 text-[9px] font-bold"
-                        >
-                          {isPlea ? 'PLEA' : 'BAJA'} {formatHourString(ext.time)}
-                        </text>
-                      </g>
-                    );
-                  })}
-
-                  {/* Indicador de hora simulada o actual */}
-                  {simulatedPoint && (
-                    <g>
-                      <line 
-                        x1={(simulatedHour / 23) * svgWidth} 
-                        y1={0} 
-                        x2={(simulatedHour / 23) * svgWidth} 
-                        y2={svgHeight} 
-                        className="stroke-slate-300" 
-                        strokeWidth="1" 
-                        strokeDasharray="3,3" 
-                      />
-                      <circle 
-                        cx={(simulatedHour / 23) * svgWidth} 
-                        cy={svgHeight - paddingY - (((heightSystem === 'puerto' ? simulatedPoint.puertoHeight : simulatedPoint.mslHeight) - minDailyHeight) / heightSpan) * (svgHeight - paddingY * 2)} 
-                        r="5" 
-                        className="fill-slate-900 stroke-white" 
-                        strokeWidth="1.5" 
-                      />
-                    </g>
-                  )}
-                </svg>
-              </div>
-
-              {/* CONTROL HORARIO SLIDER - Integración natural y táctil */}
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-2">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-500 font-bold flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" /> Marea a las:
-                  </span>
-                  <span className="text-slate-900 font-extrabold text-sm">
-                    {simulatedHour.toString().padStart(2, '0')}:00h
+            {/* HERO: ESTADO ACTUAL (Solo se muestra si estamos viendo "Hoy") */}
+            {activeDayIndex === 0 && currentStatus && (
+              <section className="bg-white border border-ink/8 rounded-xl p-6 md:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.01)] space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-ink/6 pb-4">
+                  <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40">Nivel de la Mar en Tiempo Real</span>
+                  <span className="text-[11px] font-bold text-ink/50 flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-kelp" /> Boya del Faro de Chipiona
                   </span>
                 </div>
-                
-                <input 
-                  type="range" 
-                  min="0" 
-                  max="23" 
-                  value={simulatedHour} 
-                  onChange={(e) => setSimulatedHour(parseInt(e.target.value))} 
-                  className="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600" 
-                />
 
-                {simulatedPoint && (
-                  <div className="grid grid-cols-2 gap-3 pt-2 text-left border-t border-slate-200/60 mt-1">
-                    <div>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Altura Simulada</p>
-                      <p className="text-sm font-black text-blue-600">
-                        {(heightSystem === 'puerto' ? simulatedPoint.puertoHeight : simulatedPoint.mslHeight).toFixed(2)} metros
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tiempo y Viento</p>
-                      <p className="text-xs font-bold text-slate-700">
-                        {simulatedPoint.temp.toFixed(1)}°C • {simulatedPoint.wind.toFixed(0)} km/h
-                      </p>
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-end">
+                  <div className="sm:col-span-7 space-y-2">
+                    <p className="text-6xl md:text-7xl font-black tracking-tighter text-ink font-display flex items-baseline">
+                      {(currentStatus.currentPoint[heightSystem === 'puerto' ? 'puertoHeight' : 'mslHeight']).toFixed(2)}
+                      <span className="text-3xl font-bold text-ink/40 ml-2">m</span>
+                    </p>
+                    <div className="flex items-center gap-2 text-xs font-bold">
+                      {currentStatus.isRising ? (
+                        <span className="flex items-center gap-1 px-2.5 py-1 bg-kelp/10 text-kelp rounded-full">
+                          <TrendingUp className="w-3.5 h-3.5" /> Marea en Creciente
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1 px-2.5 py-1 bg-marine/10 text-marine rounded-full">
+                          <TrendingDown className="w-3.5 h-3.5" /> Marea en Vaciante
+                        </span>
+                      )}
                     </div>
                   </div>
-                )}
-              </div>
-            </section>
 
-            {/* TABLA DE EXTREMOS DIARIOS DEL DÍA ACTIVO */}
-            <section className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-              <div className="flex justify-between items-center mb-3">
-                <h4 className="text-xs uppercase font-extrabold tracking-widest text-slate-400">Puntos Clave del Día</h4>
-                <div className="text-[11px] text-slate-500 font-medium flex items-center gap-1">
-                  <span>{activeDay.moonPhase}</span>
-                  <span>{activeDay.moonIcon}</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                {activeDay.extrema.map((ext, idx) => {
-                  const isPleamar = ext.type === 'Pleamar';
-                  return (
-                    <div key={idx} className="bg-slate-50/60 p-3 rounded-xl border border-slate-100 flex items-center justify-between">
-                      <div>
-                        <p className={`text-[11px] font-black uppercase ${isPleamar ? 'text-emerald-700' : 'text-blue-700'}`}>
-                          {ext.type}
-                        </p>
-                        <p className="text-[10px] text-slate-400">Hora de Chipiona</p>
+                  {currentStatus.nextExtremum && (
+                    <div className="sm:col-span-5 bg-mineral border border-ink/6 p-4 rounded-xl space-y-1.5">
+                      <span className="text-[9px] font-extrabold uppercase text-ink/40 block tracking-widest">
+                        Siguiente Hito Marino
+                      </span>
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-base font-black text-ink">
+                          {currentStatus.nextExtremum.type}
+                        </span>
+                        <span className="text-lg font-mono font-black text-marine">
+                          {formatHourString(currentStatus.nextExtremum.time)}
+                        </span>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-extrabold text-slate-800">{formatHourString(ext.time)}</p>
-                        <p className="text-xs font-bold text-slate-500">
-                          {(heightSystem === 'puerto' ? ext.puertoHeight : ext.mslHeight).toFixed(2)}m
+                      <span className="text-[11px] text-ink/50 block font-semibold">
+                        Altura estimada: {(heightSystem === 'puerto' ? currentStatus.nextExtremum.puertoHeight : currentStatus.nextExtremum.mslHeight).toFixed(2)}m
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Sistema de altura */}
+                <div className="pt-2 flex items-center justify-between text-xs">
+                  <span className="text-ink/40 font-bold">Ajuste de altura de referencia:</span>
+                  <div className="inline-flex bg-mineral p-1 rounded-lg border border-ink/8">
+                    <button 
+                      onClick={() => setHeightSystem('puerto')} 
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider transition-all duration-200 ${heightSystem === 'puerto' ? 'bg-white text-ink shadow-sm' : 'text-ink/40 hover:text-ink/80'}`}
+                    >
+                      Cero del Puerto
+                    </button>
+                    <button 
+                      onClick={() => setHeightSystem('msl')} 
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider transition-all duration-200 ${heightSystem === 'msl' ? 'bg-white text-ink shadow-sm' : 'text-ink/40 hover:text-ink/80'}`}
+                    >
+                      Nivel Medio (MSL)
+                    </button>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* CURVA DE MAREA INTERACTIVA */}
+            {activeDay && (
+              <section className="bg-white border border-ink/8 rounded-xl p-6 md:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.01)] space-y-6">
+                <div className="flex justify-between items-center border-b border-ink/6 pb-4">
+                  <div>
+                    <span className="text-[9px] uppercase font-extrabold tracking-widest text-ink/40 block">Curva Hidrodinámica</span>
+                    <h2 className="text-lg font-black tracking-tight text-ink">
+                      {activeDayIndex === 0 ? "Ciclo Diario Activo" : `Pronóstico: ${formatFriendlyDate(activeDay.date, false)}`}
+                    </h2>
+                  </div>
+                  <div className="bg-foam border border-ink/6 px-4 py-1.5 rounded-full text-xs font-bold text-kelp flex items-center gap-1.5">
+                    <span>Coeficiente:</span>
+                    <span className="text-sm font-black font-display">{activeDay.tideCoefficient}</span>
+                  </div>
+                </div>
+
+                {/* SVG de la Gráfica */}
+                <div className="relative pt-4">
+                  <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto block">
+                    <defs>
+                      <linearGradient id="softTide" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="var(--color-marine)" stopOpacity="0.12" />
+                        <stop offset="100%" stopColor="var(--color-marine)" stopOpacity="0.0" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Guías horizontales discretas */}
+                    {Array.from({ length: 4 }).map((_, step) => {
+                      const val = minDailyHeight + (heightSpan / 3) * step;
+                      const y = svgHeight - paddingY - (step / 3) * (svgHeight - paddingY * 2);
+                      return (
+                        <g key={step}>
+                          <line x1="0" y1={y} x2={svgWidth} y2={y} className="stroke-ink/5" strokeWidth="1" strokeDasharray="4,4" />
+                          <text x="4" y={y - 4} className="fill-ink/35 text-[9px] font-mono font-bold">{val.toFixed(1)}m</text>
+                        </g>
+                      );
+                    })}
+
+                    {/* Curva de agua y relleno */}
+                    {fillPath && <path d={fillPath} fill="url(#softTide)" />}
+                    {linePath && <path d={linePath} fill="none" stroke="var(--color-marine)" strokeWidth="2.5" strokeLinecap="round" />}
+
+                    {/* Hitos: Pleamares y Bajamares */}
+                    {activeDay.extrema.map((ext, idx) => {
+                      const val = heightSystem === 'puerto' ? ext.puertoHeight : ext.mslHeight;
+                      const x = (ext.time.getHours() / 23) * svgWidth;
+                      const y = svgHeight - paddingY - ((val - minDailyHeight) / heightSpan) * (svgHeight - paddingY * 2);
+                      const isPlea = ext.type === 'Pleamar';
+
+                      return (
+                        <g key={idx}>
+                          <circle cx={x} cy={y} r="5" className={`${isPlea ? 'fill-kelp' : 'fill-marine'} stroke-white`} strokeWidth="2" />
+                          <text 
+                            x={x} 
+                            y={isPlea ? y - 12 : y + 20} 
+                            textAnchor="middle" 
+                            className="fill-ink text-[10px] font-black uppercase tracking-wider"
+                          >
+                            {isPlea ? 'PLEA' : 'BAJA'} {formatHourString(ext.time)}
+                          </text>
+                        </g>
+                      );
+                    })}
+
+                    {/* Indicador de hora simulada o actual */}
+                    {simulatedPoint && (
+                      <g>
+                        <line 
+                          x1={(simulatedHour / 23) * svgWidth} 
+                          y1={0} 
+                          x2={(simulatedHour / 23) * svgWidth} 
+                          y2={svgHeight} 
+                          className="stroke-ink/15" 
+                          strokeWidth="1.5" 
+                          strokeDasharray="3,3" 
+                        />
+                        <circle 
+                          cx={(simulatedHour / 23) * svgWidth} 
+                          cy={svgHeight - paddingY - (((heightSystem === 'puerto' ? simulatedPoint.puertoHeight : simulatedPoint.mslHeight) - minDailyHeight) / heightSpan) * (svgHeight - paddingY * 2)} 
+                          r="6" 
+                          className="fill-ink stroke-white" 
+                          strokeWidth="2" 
+                        />
+                      </g>
+                    )}
+                  </svg>
+                </div>
+
+                {/* CONTROL HORARIO SLIDER */}
+                <div className="bg-mineral p-4 md:p-5 rounded-xl border border-ink/8 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-ink/50 font-bold flex items-center gap-1.5">
+                      <Clock className="w-4 h-4 text-ink/45" /> Observación horaria:
+                    </span>
+                    <span className="text-ink font-mono font-black text-sm bg-white px-3 py-1 rounded border border-ink/6">
+                      {simulatedHour.toString().padStart(2, '0')}:00h
+                    </span>
+                  </div>
+                  
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="23" 
+                    value={simulatedHour} 
+                    onChange={(e) => setSimulatedHour(parseInt(e.target.value))} 
+                    className="w-full h-1.5 bg-ink/10 rounded-lg appearance-none cursor-pointer accent-marine" 
+                  />
+
+                  {simulatedPoint && (
+                    <div className="grid grid-cols-2 gap-4 pt-3 text-left border-t border-ink/6 mt-2">
+                      <div>
+                        <p className="text-[9px] text-ink/40 font-bold uppercase tracking-wider">Altura Simulada</p>
+                        <p className="text-base font-black text-marine">
+                          {(heightSystem === 'puerto' ? simulatedPoint.puertoHeight : simulatedPoint.mslHeight).toFixed(2)} metros
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[9px] text-ink/40 font-bold uppercase tracking-wider">Meteo & Viento</p>
+                        <p className="text-xs font-bold text-ink/75 mt-0.5">
+                          {simulatedPoint.temp.toFixed(1)}°C • {simulatedPoint.wind.toFixed(0)} km/h
                         </p>
                       </div>
                     </div>
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* TABLA DE EXTREMOS DIARIOS DEL DÍA ACTIVO */}
+            {activeDay && (
+              <section className="bg-white border border-ink/8 rounded-xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.01)]">
+                <div className="flex justify-between items-center border-b border-ink/6 pb-3 mb-4">
+                  <h4 className="text-xs uppercase font-extrabold tracking-widest text-ink/40">Hitos de Pleamar y Bajamar</h4>
+                  <div className="text-[11px] text-ink/60 font-bold flex items-center gap-1 bg-mineral px-2.5 py-1 rounded">
+                    <span>Fase Lunar: {activeDay.moonPhase}</span>
+                    <span className="text-xs">{activeDay.moonIcon}</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {activeDay.extrema.map((ext, idx) => {
+                    const isPleamar = ext.type === 'Pleamar';
+                    return (
+                      <div key={idx} className="bg-mineral p-4 rounded-xl border border-ink/6 flex items-center justify-between">
+                        <div>
+                          <p className={`text-xs font-black uppercase tracking-wider ${isPleamar ? 'text-kelp' : 'text-marine'}`}>
+                            {ext.type}
+                          </p>
+                          <p className="text-[9px] text-ink/40 font-semibold">Bajo Cero de Chipiona</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-base font-mono font-black text-ink">{formatHourString(ext.time)}</p>
+                          <p className="text-xs font-bold text-ink/50 mt-0.5">
+                            {(heightSystem === 'puerto' ? ext.puertoHeight : ext.mslHeight).toFixed(2)}m
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
+          </div>
+
+          {/* COLUMNA DERECHA: RECOMENDACIÓN CORRALES, CALENDARIO, CONDICIONES (4 COLUMNAS EN DESKTOP) */}
+          <div className="lg:col-span-4 space-y-6">
+            
+            {/* RECOMENDACIÓN CORRALES DE CHIPIONA */}
+            {corralesAdvice && (
+              <section className={`border rounded-xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.01)] space-y-3 transition-colors ${corralesAdvice.bg}`}>
+                <div className="flex justify-between items-center">
+                  <span className="text-[9px] font-extrabold uppercase tracking-widest text-ink/45">Monumento Natural</span>
+                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${corralesAdvice.badge}`}>
+                    Coef. {activeDay.tideCoefficient}
+                  </span>
+                </div>
+                <h4 className="text-sm font-black tracking-tight uppercase">{corralesAdvice.title}</h4>
+                <p className="text-xs leading-relaxed text-ink/75">{corralesAdvice.desc}</p>
+              </section>
+            )}
+
+            {/* CALENDARIO DE MAREAS (Lista vertical en desktop, scroll lateral en móvil) */}
+            <section className="bg-white border border-ink/8 rounded-xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.01)] space-y-4">
+              <div className="border-b border-ink/6 pb-3">
+                <h3 className="text-xs uppercase font-extrabold tracking-widest text-ink/40">Calendario Semanal</h3>
+                <p className="text-[10px] text-ink/40 font-semibold mt-0.5">Selecciona un día para actualizar el pronóstico</p>
+              </div>
+              
+              <div className="flex lg:flex-col gap-2.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-none snap-x">
+                {daysData.map((day, idx) => {
+                  const isActive = idx === activeDayIndex;
+                  const isToday = idx === 0;
+                  const dayLabel = day.date.toLocaleDateString('es-ES', { weekday: 'short' });
+                  const dayNum = day.date.getDate();
+                  const monthLabel = day.date.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '');
+
+                  const pleas = day.extrema.filter(e => e.type === 'Pleamar');
+                  const bajas = day.extrema.filter(e => e.type === 'Bajamar');
+
+                  return (
+                    <button
+                      key={day.dateStr}
+                      onClick={() => setActiveDayIndex(idx)}
+                      className={`snap-start shrink-0 w-28 lg:w-full p-4 rounded-xl border text-left transition-all duration-200 ${
+                        isActive 
+                          ? 'bg-ink border-ink text-white shadow-sm' 
+                          : 'bg-white border-ink/6 text-ink hover:bg-mineral'
+                      }`}
+                    >
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-1">
+                        <div>
+                          <p className={`text-[9px] font-extrabold uppercase tracking-wider ${isActive ? 'text-foam' : 'text-ink/40'}`}>
+                            {dayLabel} {isToday ? "(Hoy)" : ""}
+                          </p>
+                          <p className="text-sm font-black tracking-tight mt-0.5">
+                            {dayNum} {monthLabel}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${isActive ? 'bg-white/10 text-white' : 'bg-mineral text-ink/60 border border-ink/5'}`}>
+                            Coef: {day.tideCoefficient}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Extremos rápidos */}
+                      <div className="mt-3 pt-2.5 border-t border-ink/10 text-[10px] grid grid-cols-2 gap-1 font-mono">
+                        {pleas.length > 0 && (
+                          <div className="flex gap-1">
+                            <span className="text-kelp font-black">P:</span>
+                            <span className={isActive ? 'text-white/80' : 'text-ink/75'}>{formatHourString(pleas[0].time)}</span>
+                          </div>
+                        )}
+                        {bajas.length > 0 && (
+                          <div className="flex gap-1">
+                            <span className="text-marine font-black">B:</span>
+                            <span className={isActive ? 'text-white/80' : 'text-ink/75'}>{formatHourString(bajas[0].time)}</span>
+                          </div>
+                        )}
+                      </div>
+                    </button>
                   );
                 })}
               </div>
             </section>
 
-          </div>
-        )}
+            {/* CONDICIONES METEO/OLEAJE */}
+            {activeDay && (
+              <section className="bg-white border border-ink/8 rounded-xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.01)] space-y-4">
+                <h4 className="text-xs uppercase font-extrabold tracking-widest text-ink/40 border-b border-ink/6 pb-3">Dinámica Náutica</h4>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                  <div className="bg-mineral p-4 rounded-xl border border-ink/6 flex items-center gap-3">
+                    <Waves className="w-5 h-5 text-marine shrink-0" />
+                    <div>
+                      <p className="text-[9px] font-bold text-ink/40 uppercase tracking-wider">Altura de Ola Media</p>
+                      <p className="text-sm font-black text-ink">{activeDay.avgWave.toFixed(2)}m</p>
+                    </div>
+                  </div>
 
-        {/* SECCIÓN 2: CALENDARIO DE MAREAS (Próximos días en scroll lateral con datos directamente legibles) */}
-        <section className="space-y-2.5">
-          <div className="flex justify-between items-center px-1">
-            <h3 className="text-xs uppercase font-extrabold tracking-widest text-slate-400">Calendario Semanal</h3>
-            <span className="text-[10px] text-slate-400 font-bold">Selecciona para cambiar gráfica</span>
+                  <div className="bg-mineral p-4 rounded-xl border border-ink/6 flex items-center gap-3">
+                    <Wind className="w-5 h-5 text-kelp shrink-0" />
+                    <div>
+                      <p className="text-[9px] font-bold text-ink/40 uppercase tracking-wider">Velocidad del Viento</p>
+                      <p className="text-sm font-black text-ink">{activeDay.avgWind.toFixed(0)} km/h</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between text-xs px-1 text-ink/50 pt-1 font-semibold">
+                  <span className="flex items-center gap-1.5">
+                    <Thermometer className="w-4 h-4 text-ink/45" /> Temperatura del Aire
+                  </span>
+                  <span className="font-bold text-ink/80">
+                    {activeDay.minTemp.toFixed(1)}°C - {activeDay.maxTemp.toFixed(1)}°C
+                  </span>
+                </div>
+              </section>
+            )}
+
+            {/* FOOTER EXPLICATIVO */}
+            <footer className="text-center lg:text-left space-y-3 px-2">
+              <p className="text-[10px] text-ink/40 leading-relaxed">
+                Las mediciones en <strong className="text-ink/60">Cero del Puerto</strong> añaden un factor de calibración de +2.1m al nivel medio del mar (MSL), lo que permite la equivalencia física con el histórico de cartas náuticas del Instituto Hidrográfico de la Marina (IHM) para la costa de Cádiz.
+              </p>
+              <div className="border-t border-ink/8 pt-3">
+                <p className="text-[9px] font-bold text-ink/35 uppercase tracking-widest">
+                  © Costa Chipiona • {new Date().getFullYear()}
+                </p>
+              </div>
+            </footer>
+
           </div>
           
-          <div className="flex gap-2.5 overflow-x-auto pb-1 scrollbar-none snap-x">
-            {daysData.map((day, idx) => {
-              const isActive = idx === activeDayIndex;
-              const isToday = idx === 0;
-              const friendlyDate = formatFriendlyDate(day.date, isToday);
-              const dayLabel = day.date.toLocaleDateString('es-ES', { weekday: 'short' });
-
-              // Extraemos extremos principales para mostrarlos directamente en la miniatura de la tarjeta
-              const pleas = day.extrema.filter(e => e.type === 'Pleamar');
-              const bajas = day.extrema.filter(e => e.type === 'Bajamar');
-
-              return (
-                <button
-                  key={day.dateStr}
-                  onClick={() => setActiveDayIndex(idx)}
-                  className={`snap-start shrink-0 w-28 p-3 rounded-xl border text-left transition ${
-                    isActive 
-                      ? 'bg-slate-900 border-slate-900 text-white shadow-sm' 
-                      : 'bg-white border-slate-200 text-slate-900 hover:bg-slate-50'
-                  }`}
-                >
-                  <p className={`text-[9px] font-black uppercase tracking-wider ${isActive ? 'text-blue-300' : 'text-slate-400'}`}>
-                    {dayLabel}
-                  </p>
-                  <p className="text-sm font-black tracking-tight">{day.date.getDate()} {day.date.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '')}</p>
-                  
-                  {/* Coeficiente */}
-                  <div className="mt-2 text-[10px] font-bold flex justify-between items-center">
-                    <span className={isActive ? 'text-slate-300' : 'text-slate-500'}>Coef</span>
-                    <span className={isActive ? 'text-blue-300' : 'text-blue-600 font-extrabold'}>{day.tideCoefficient}</span>
-                  </div>
-
-                  {/* Extremos Rápidos en la Tarjeta */}
-                  <div className="mt-2 pt-2 border-t border-slate-150/20 text-[9px] space-y-1">
-                    {pleas.length > 0 && (
-                      <p className="flex justify-between font-mono">
-                        <span className="text-emerald-500">P</span>
-                        <span>{formatHourString(pleas[0].time)}</span>
-                      </p>
-                    )}
-                    {bajas.length > 0 && (
-                      <p className="flex justify-between font-mono">
-                        <span className="text-blue-500">B</span>
-                        <span>{formatHourString(bajas[0].time)}</span>
-                      </p>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* SECCIÓN 3: RECOMENDACIÓN CORRALES DE CHIPIONA (Muy local, cero IA look) */}
-        {corralesAdvice && (
-          <section className={`border rounded-2xl p-4 shadow-sm ${corralesAdvice.bg} ${corralesAdvice.text} transition-colors`}>
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Monumento Natural</span>
-              <span className={`text-[9px] font-bold px-2 py-0.5 rounded ${corralesAdvice.badge}`}>
-                Coef. {activeDay.tideCoefficient}
-              </span>
-            </div>
-            <h4 className="text-xs font-black tracking-tight uppercase mb-1">{corralesAdvice.title}</h4>
-            <p className="text-xs leading-relaxed opacity-90">{corralesAdvice.desc}</p>
-          </section>
-        )}
-
-        {/* SECCIÓN 4: CONDICIONES NÁUTICAS / METEO DEL DÍA SELECCIONADO */}
-        {activeDay && (
-          <section className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3.5">
-            <h4 className="text-xs uppercase font-extrabold tracking-widest text-slate-400">Condiciones de Viento y Oleaje</h4>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-center gap-3">
-                <Waves className="w-5 h-5 text-blue-600 shrink-0" />
-                <div>
-                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Oleaje Medio</p>
-                  <p className="text-sm font-extrabold text-slate-800">{activeDay.avgWave.toFixed(2)}m</p>
-                </div>
-              </div>
-
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-center gap-3">
-                <Wind className="w-5 h-5 text-slate-600 shrink-0" />
-                <div>
-                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Viento Medio</p>
-                  <p className="text-sm font-extrabold text-slate-800">{activeDay.avgWind.toFixed(0)} km/h</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-xs px-1 text-slate-500">
-              <span className="flex items-center gap-1">
-                <Thermometer className="w-3.5 h-3.5" /> Temp. Costa
-              </span>
-              <span className="font-bold text-slate-700">
-                Min {activeDay.minTemp.toFixed(1)}°C | Max {activeDay.maxTemp.toFixed(1)}°C
-              </span>
-            </div>
-          </section>
-        )}
-
-        {/* PIE DE PÁGINA EXPLICATIVO */}
-        <footer className="px-1 text-center space-y-2 pt-4">
-          <p className="text-[10px] text-slate-400 leading-relaxed">
-            Las alturas en <strong className="text-slate-600">Cero Puerto</strong> añaden un factor de calibración de +2.1m al nivel medio del mar (MSL), sincronizándose óptimamente con el histórico del Instituto Hidrográfico de la Marina española para Chipiona y Cádiz.
-          </p>
-          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest pt-2">
-            © Costa Chipiona • {new Date().getFullYear()}
-          </p>
-        </footer>
-
+        </div>
       </main>
     </div>
   );

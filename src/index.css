@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+@theme {
+  /* Fuentes del sistema de diseño */
+  --font-display: "Outfit", sans-serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+
+  /* Paleta de colores costera/mineral */
+  --color-ink: #0C141D;
+  --color-mineral: #F3F6F6;
+  --color-marine: #1C5177;
+  --color-kelp: #2B6D6D;
+  --color-sand: #E5DCD3;
+  --color-rust: #D96B27;
+  --color-foam: #E4EDED;
+}
+
+/* Reglas básicas globales */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-mineral);
+  color: var(--color-ink);
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
