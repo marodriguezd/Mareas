@@ -18,8 +18,11 @@ import {
   Activity, 
   Calendar,
   ChevronRight,
-  Navigation
+  Navigation,
+  Search,
+  X
 } from 'lucide-react';
+import coastsData from './coasts.json';
 
 // Coordenadas geográficas oficiales de Chipiona, Cádiz
 const LATITUDE = 36.735;
@@ -71,6 +74,19 @@ function getMoonAndTideSpecs(date) {
 }
 
 export default function App() {
+  // Estado para la costa/playa seleccionada (por defecto Chipiona)
+  const [location, setLocation] = useState(() => {
+    const saved = localStorage.getItem('selected_location');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Error parsing saved location", e);
+      }
+    }
+    return { name: "Chipiona", latitude: 36.735, longitude: -6.438 };
+  });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -81,12 +97,16 @@ export default function App() {
   const [daysData, setDaysData] = useState([]); 
   const [currentStatus, setCurrentStatus] = useState(null);
 
+  // Estados para el buscador de costas
+  const [searchActive, setSearchActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const loadData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=sea_level_height_msl,wave_height,wave_period,sea_surface_temperature&timezone=Europe%2FMadrid`;
-      const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=temperature_2m,wind_speed_10m,weather_code&timezone=Europe%2FMadrid`;
+      const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${location.latitude}&longitude=${location.longitude}&hourly=sea_level_height_msl,wave_height,wave_period,sea_surface_temperature&timezone=Europe%2FMadrid`;
+      const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&hourly=temperature_2m,wind_speed_10m,weather_code&timezone=Europe%2FMadrid`;
 
       const [marineRes, weatherRes] = await Promise.all([
         fetchWithRetry(marineUrl),
@@ -99,6 +119,11 @@ export default function App() {
 
       const times = marineRes.hourly.time;
       const mslHeights = marineRes.hourly.sea_level_height_msl;
+
+      // Validación para coordenadas terrestres sin datos de marea
+      if (!mslHeights || mslHeights.length === 0 || mslHeights[0] === null) {
+        throw new Error("No hay datos de marea disponibles para esta ubicación. Asegúrate de elegir un destino en la costa.");
+      }
       const waveHeights = marineRes.hourly.wave_height;
       const wavePeriods = marineRes.hourly.wave_period;
       const seaTemps = marineRes.hourly.sea_surface_temperature;
@@ -210,7 +235,7 @@ export default function App() {
       setLastUpdated(new Date());
     } catch (err) {
       console.error(err);
-      setError("No se ha podido sincronizar con la boya de Chipiona. Comprueba tu conexión.");
+      setError(err.message || `No se ha podido sincronizar con la costa de ${location.name}. Comprueba tu conexión.`);
     } finally {
       setLoading(false);
     }
@@ -220,11 +245,75 @@ export default function App() {
     loadData();
     const interval = setInterval(loadData, 300000); 
     return () => clearInterval(interval);
-  }, []);
+  }, [location]);
+
+  useEffect(() => {
+    document.title = `Costa ${location.name} - Tabla de Mareas`;
+  }, [location]);
+
+  useEffect(() => {
+    if (!searchActive) return;
+    const handleOutsideClick = (e) => {
+      const headerEl = document.querySelector('header');
+      if (headerEl && !headerEl.contains(e.target)) {
+        setSearchActive(false);
+        setSearchQuery('');
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [searchActive]);
 
   useEffect(() => {
     setSimulatedHour(activeDayIndex === 0 ? new Date().getHours() : 12);
   }, [activeDayIndex]);
+
+  const normalizeText = (text) => {
+    return text ? text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "";
+  };
+
+  const filteredCoasts = useMemo(() => {
+    const q = normalizeText(searchQuery).trim();
+    if (!q) {
+      return coastsData;
+    }
+
+    const scored = coastsData.map(coast => {
+      const nameNorm = normalizeText(coast.name);
+      const detailsNorm = normalizeText(coast.details);
+      
+      let score = 0;
+      if (nameNorm === q) {
+        score = 100;
+      } else if (nameNorm.startsWith(q)) {
+        score = 80;
+      } else if (nameNorm.split(/\s+/).some(word => word.startsWith(q))) {
+        score = 60;
+      } else if (nameNorm.includes(q)) {
+        score = 40;
+      } else if (detailsNorm.includes(q)) {
+        score = 20;
+      }
+
+      return { ...coast, score };
+    });
+
+    return scored
+      .filter(item => item.score > 0)
+      .sort((a, b) => {
+        if (b.score !== a.score) {
+          return b.score - a.score;
+        }
+        return a.name.localeCompare(b.name);
+      });
+  }, [searchQuery]);
+
+  const handleSelectCoast = (coast) => {
+    setLocation(coast);
+    localStorage.setItem('selected_location', JSON.stringify(coast));
+    setSearchActive(false);
+    setSearchQuery('');
+  };
 
   const activeDay = useMemo(() => daysData[activeDayIndex] || null, [daysData, activeDayIndex]);
 
@@ -288,7 +377,7 @@ export default function App() {
     return (
       <div className="min-h-screen bg-mineral flex flex-col items-center justify-center p-6">
         <Waves className="w-12 h-12 text-marine animate-pulse mb-4" />
-        <h2 className="text-xs font-bold tracking-widest uppercase text-ink/40 animate-pulse">Buscando marea en Chipiona...</h2>
+        <h2 className="text-xs font-bold tracking-widest uppercase text-ink/40 animate-pulse">Buscando marea en {location.name}...</h2>
       </div>
     );
   }
@@ -332,21 +421,101 @@ export default function App() {
       
       {/* HEADER EDITORIAL */}
       <header className="border-b border-ink/8 bg-white/80 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-marine rounded-full animate-pulse"></span>
-            <h1 className="text-sm font-black uppercase tracking-tight text-ink">Costa Chipiona</h1>
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-4 relative">
+          
+          {/* TÍTULO Y HORA A LA IZQUIERDA */}
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-marine rounded-full animate-pulse"></span>
+              <h1 className="text-sm font-black uppercase tracking-tight text-ink">
+                Costa {location.name}
+              </h1>
+            </div>
+            {currentStatus && (
+              <div className="flex items-center gap-2 mt-1 text-[10px] font-mono font-bold text-ink/50">
+                <span className="bg-mineral px-2 py-0.5 rounded border border-ink/6 text-ink">
+                  {formatHourString(currentStatus.time)}
+                </span>
+                <span className="hidden xs:inline">•</span>
+                <span className="hidden xs:inline">
+                  {location.latitude.toFixed(3)}° N, {location.longitude.toFixed(3)}° W
+                </span>
+              </div>
+            )}
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="text-right hidden sm:block">
-              <p className="text-[9px] font-mono font-bold text-ink/40">36.735° N, 6.438° W</p>
-            </div>
-            <div className="h-4 w-px bg-ink/8 hidden sm:block"></div>
-            <span className="text-[10px] font-mono font-bold text-ink bg-mineral px-2.5 py-1 rounded border border-ink/6">
-              {formatHourString(currentStatus.time)}
-            </span>
+          {/* LUPA Y BÚSQUEDA A LA DERECHA */}
+          <div className="flex items-center gap-2">
+            {searchActive ? (
+              <form onSubmit={(e) => e.preventDefault()} className="flex items-center gap-1.5 bg-mineral border border-ink/15 rounded-lg px-2 py-1 transition-all duration-200 w-44 sm:w-64">
+                <Search className="w-3.5 h-3.5 text-ink/45" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Buscar playa o costa..."
+                  className="bg-transparent border-none outline-none text-[11px] font-bold text-ink w-full p-0 placeholder:text-ink/35"
+                  autoFocus
+                />
+                {searchQuery && (
+                  <button 
+                    type="button" 
+                    onClick={() => { setSearchQuery(''); }}
+                    className="p-0.5 hover:bg-ink/5 rounded-full"
+                  >
+                    <X className="w-3 h-3 text-ink/45" />
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchActive(false);
+                    setSearchQuery('');
+                  }}
+                  className="text-[10px] font-extrabold uppercase text-ink/45 hover:text-ink border-l border-ink/10 pl-1.5 ml-0.5"
+                >
+                  Cerrar
+                </button>
+              </form>
+            ) : (
+              <button
+                onClick={() => setSearchActive(true)}
+                className="p-2 hover:bg-mineral rounded-lg border border-transparent hover:border-ink/8 text-ink/70 hover:text-ink transition-all flex items-center gap-1 cursor-pointer"
+                aria-label="Buscar costa"
+              >
+                <Search className="w-4 h-4" />
+                <span className="text-[10px] font-bold uppercase tracking-wider hidden sm:inline">Buscar Costa</span>
+              </button>
+            )}
           </div>
+          
+          {/* DROPDOWN DE RESULTADOS (BASE DE DATOS LOCAL) */}
+          {searchActive && (
+            <div className="absolute right-4 md:right-8 top-full mt-2 w-64 sm:w-72 bg-white/95 backdrop-blur-md border border-ink/10 rounded-xl shadow-lg p-2 z-50 flex flex-col space-y-1.5 max-h-80 overflow-y-auto">
+              {filteredCoasts.length > 0 ? (
+                <>
+                  <div className="px-2 py-1 text-[9px] font-extrabold uppercase text-ink/30 tracking-wider">
+                    {searchQuery.trim() === '' ? 'Costas y Playas de España' : 'Resultados de búsqueda'}
+                  </div>
+                  {filteredCoasts.slice(0, 50).map((coast, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSelectCoast(coast)}
+                      className="w-full text-left px-2 py-1.5 hover:bg-mineral rounded-lg transition-colors flex flex-col cursor-pointer"
+                    >
+                      <span className="text-[11px] font-bold text-ink">{coast.name}</span>
+                      <span className="text-[9px] text-ink/40 font-semibold">{coast.details}</span>
+                    </button>
+                  ))}
+                </>
+              ) : (
+                <div className="py-6 text-center text-[10px] text-ink/40 font-bold px-2">
+                  No se encontraron resultados para "{searchQuery}". <br/>Prueba con "playa", "cala" o el nombre de una localidad costera.
+                </div>
+              )}
+            </div>
+          )}
+          
         </div>
       </header>
 
@@ -364,7 +533,7 @@ export default function App() {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-ink/6 pb-3">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-ink/40">Nivel de la Mar en Tiempo Real</span>
                     <span className="text-[11px] font-bold text-ink/50 flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-kelp" /> Boya del Faro de Chipiona
+                      <MapPin className="w-3.5 h-3.5 text-kelp" /> {location.name.includes("Chipiona") ? "Boya del Faro de Chipiona" : location.name}
                     </span>
                   </div>
 
@@ -483,7 +652,7 @@ export default function App() {
                             <p className={`text-xs font-black uppercase tracking-wider ${isPleamar ? 'text-kelp' : 'text-marine'}`}>
                               {ext.type}
                             </p>
-                            <p className="text-[9px] text-ink/40 font-semibold">Chipiona/Cádiz</p>
+                            <p className="text-[9px] text-ink/40 font-semibold">{location.name.includes("Chipiona") ? "Chipiona/Cádiz" : location.name}</p>
                           </div>
                           <div className="text-right">
                             <p className="text-base font-mono font-black text-ink">{formatHourString(ext.time)}</p>
@@ -769,11 +938,11 @@ export default function App() {
 
               <footer className="text-center md:text-left space-y-2 px-2">
                 <p className="text-[10px] text-ink/40 leading-relaxed">
-                  Las alturas referenciadas en <strong className="text-ink/60">Cero del Puerto</strong> incorporan un ajuste local de +2.1m sobre el nivel medio del mar (MSL) para mantener correspondencia exacta con las tablas del IHM de la armada española para Chipiona y Cádiz.
+                  Las alturas referenciadas en <strong className="text-ink/60">Cero del Puerto</strong> incorporan un ajuste local de +2.1m sobre el nivel medio del mar (MSL) para mantener correspondencia con las tablas oficiales (referencia estándar de Chipiona y Cádiz).
                 </p>
                 <div className="border-t border-ink/8 pt-3">
                   <p className="text-[9px] font-bold text-ink/35 uppercase tracking-widest">
-                    © Costa Chipiona • {new Date().getFullYear()}
+                    © Costa {location.name} • {new Date().getFullYear()}
                   </p>
                 </div>
               </footer>

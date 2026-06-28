@@ -1,0 +1,1034 @@
+[
+  {
+    "name": "A Coruña",
+    "latitude": 43.3466447,
+    "longitude": -8.4127029,
+    "details": "A Coruña, Galicia"
+  },
+  {
+    "name": "A Guarda",
+    "latitude": 41.9028824,
+    "longitude": -8.8563509,
+    "details": "Pontevedra, Galicia"
+  },
+  {
+    "name": "Adra",
+    "latitude": 36.748834,
+    "longitude": -3.0203617,
+    "details": "Almería, Andalucía"
+  },
+  {
+    "name": "Alcúdia",
+    "latitude": 39.8099546,
+    "longitude": 3.2182747,
+    "details": "Mallorca, Islas Baleares"
+  },
+  {
+    "name": "Algeciras",
+    "latitude": 36.1311725,
+    "longitude": -5.4473991,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Alicante",
+    "latitude": 38.0636286,
+    "longitude": -0.9033148,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "Almería",
+    "latitude": 36.8685739,
+    "longitude": -2.3120282,
+    "details": "Almería, Andalucía"
+  },
+  {
+    "name": "Almuñécar",
+    "latitude": 36.7703688,
+    "longitude": -3.7236281,
+    "details": "Granada, Andalucía"
+  },
+  {
+    "name": "Altea",
+    "latitude": 38.6042577,
+    "longitude": -0.0476619,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "Amposta",
+    "latitude": 40.7079905,
+    "longitude": 0.5827636,
+    "details": "Tarragona, Cataluña"
+  },
+  {
+    "name": "Arrecife",
+    "latitude": 28.9639681,
+    "longitude": -13.5499014,
+    "details": "Lanzarote, Canarias"
+  },
+  {
+    "name": "Avilés",
+    "latitude": 43.5554436,
+    "longitude": -5.9222466,
+    "details": "Asturias"
+  },
+  {
+    "name": "Badalona",
+    "latitude": 41.4493539,
+    "longitude": 2.248254,
+    "details": "Barcelona, Cataluña"
+  },
+  {
+    "name": "Baiona",
+    "latitude": 42.0881275,
+    "longitude": -8.8485132,
+    "details": "Pontevedra, Galicia"
+  },
+  {
+    "name": "Barcelona",
+    "latitude": 41.3825802,
+    "longitude": 2.177073,
+    "details": "Barcelona, Cataluña"
+  },
+  {
+    "name": "Benalmádena",
+    "latitude": 36.594519,
+    "longitude": -4.572284,
+    "details": "Málaga, Andalucía"
+  },
+  {
+    "name": "Benidorm",
+    "latitude": 38.5482813,
+    "longitude": -0.1355764,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "Bermeo",
+    "latitude": 43.4194242,
+    "longitude": -2.7231562,
+    "details": "Vizcaya, País Vasco"
+  },
+  {
+    "name": "Bilbao",
+    "latitude": 43.2630018,
+    "longitude": -2.9350039,
+    "details": "Vizcaya, País Vasco"
+  },
+  {
+    "name": "Blanes",
+    "latitude": 41.6756178,
+    "longitude": 2.7932391,
+    "details": "Girona, Cataluña"
+  },
+  {
+    "name": "Cadaqués",
+    "latitude": 42.2893484,
+    "longitude": 3.2752159,
+    "details": "Girona, Cataluña"
+  },
+  {
+    "name": "Cala Comte",
+    "latitude": 38.962885,
+    "longitude": 1.2212672,
+    "details": "Ibiza, Baleares"
+  },
+  {
+    "name": "Cala Macarella",
+    "latitude": 39.9387024,
+    "longitude": 3.9370917,
+    "details": "Menorca, Baleares"
+  },
+  {
+    "name": "Cala Mitjana",
+    "latitude": 39.9344675,
+    "longitude": 3.9727481,
+    "details": "Menorca, Baleares"
+  },
+  {
+    "name": "Cala Salada",
+    "latitude": 39.0095323,
+    "longitude": 1.2990915,
+    "details": "Ibiza, Baleares"
+  },
+  {
+    "name": "Cala Turqueta",
+    "latitude": 39.9325401,
+    "longitude": 3.9149795,
+    "details": "Menorca, Baleares"
+  },
+  {
+    "name": "Calpe",
+    "latitude": 38.6477257,
+    "longitude": 0.0446318,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "Cambrils",
+    "latitude": 41.0679423,
+    "longitude": 1.0657579,
+    "details": "Tarragona, Cataluña"
+  },
+  {
+    "name": "Carboneras",
+    "latitude": 36.9968699,
+    "longitude": -1.8946552,
+    "details": "Almería, Andalucía"
+  },
+  {
+    "name": "Cartagena",
+    "latitude": 37.6155018,
+    "longitude": -0.987511,
+    "details": "Murcia"
+  },
+  {
+    "name": "Castelldefels",
+    "latitude": 41.2861022,
+    "longitude": 1.9824173,
+    "details": "Barcelona, Cataluña"
+  },
+  {
+    "name": "Castellón de la Plana",
+    "latitude": 39.9840916,
+    "longitude": -0.0332099,
+    "details": "Castellón, C. Valenciana"
+  },
+  {
+    "name": "Castro Urdiales",
+    "latitude": 43.3843347,
+    "longitude": -3.2162576,
+    "details": "Cantabria"
+  },
+  {
+    "name": "Ceuta",
+    "latitude": 35.894422,
+    "longitude": -5.3558174,
+    "details": "Ceuta"
+  },
+  {
+    "name": "Chiclana de la Frontera",
+    "latitude": 36.4191096,
+    "longitude": -6.1460683,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Chipiona",
+    "latitude": 36.7355451,
+    "longitude": -6.4348221,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Ciutadella de Menorca",
+    "latitude": 39.9920763,
+    "longitude": 3.8978496,
+    "details": "Menorca, Islas Baleares"
+  },
+  {
+    "name": "Conil de la Frontera",
+    "latitude": 36.277054,
+    "longitude": -6.0881874,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Cudillero",
+    "latitude": 43.5433575,
+    "longitude": -6.1936313,
+    "details": "Asturias"
+  },
+  {
+    "name": "Cullera",
+    "latitude": 39.47785,
+    "longitude": -0.3750736,
+    "details": "Valencia, C. Valenciana"
+  },
+  {
+    "name": "Cádiz",
+    "latitude": 36.5297438,
+    "longitude": -6.2928976,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Dénia",
+    "latitude": 38.8394015,
+    "longitude": 0.1127095,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "El Campello",
+    "latitude": 38.4278697,
+    "longitude": -0.3952174,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "El Ejido",
+    "latitude": 36.7743863,
+    "longitude": -2.8124886,
+    "details": "Almería, Andalucía"
+  },
+  {
+    "name": "El Puerto de Santa María",
+    "latitude": 36.6004006,
+    "longitude": -6.2252702,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Estepona",
+    "latitude": 36.4268068,
+    "longitude": -5.1468484,
+    "details": "Málaga, Andalucía"
+  },
+  {
+    "name": "Ferrol",
+    "latitude": 43.5113053,
+    "longitude": -8.2624767,
+    "details": "A Coruña, Galicia"
+  },
+  {
+    "name": "Fisterra",
+    "latitude": 42.9286659,
+    "longitude": -9.2626624,
+    "details": "A Coruña, Galicia"
+  },
+  {
+    "name": "Fuengirola",
+    "latitude": 36.5388398,
+    "longitude": -4.6233974,
+    "details": "Málaga, Andalucía"
+  },
+  {
+    "name": "Gandía",
+    "latitude": 38.9702772,
+    "longitude": -0.1799308,
+    "details": "Valencia, C. Valenciana"
+  },
+  {
+    "name": "Getaria",
+    "latitude": 43.3044559,
+    "longitude": -2.2037374,
+    "details": "Guipúzcoa, País Vasco"
+  },
+  {
+    "name": "Gibraltar",
+    "latitude": 36.2688579,
+    "longitude": -5.4656842,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Gijón",
+    "latitude": 43.5449422,
+    "longitude": -5.66275,
+    "details": "Asturias"
+  },
+  {
+    "name": "Huelva",
+    "latitude": 37.2575874,
+    "longitude": -6.9484945,
+    "details": "Huelva, Andalucía"
+  },
+  {
+    "name": "Ibiza",
+    "latitude": 38.9743901,
+    "longitude": 1.4197463,
+    "details": "Islas Baleares"
+  },
+  {
+    "name": "Isla Cristina",
+    "latitude": 37.2036925,
+    "longitude": -7.3238913,
+    "details": "Huelva, Andalucía"
+  },
+  {
+    "name": "Jávea",
+    "latitude": 38.7895859,
+    "longitude": 0.1629003,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "L'Ametlla de Mar",
+    "latitude": 40.8838957,
+    "longitude": 0.8024645,
+    "details": "Tarragona, Cataluña"
+  },
+  {
+    "name": "L'Estartit",
+    "latitude": 42.0512172,
+    "longitude": 3.1990824,
+    "details": "Girona, Cataluña"
+  },
+  {
+    "name": "La Línea de la Concepción",
+    "latitude": 36.1677899,
+    "longitude": -5.3482396,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "La Manga del Mar Menor",
+    "latitude": 37.6459222,
+    "longitude": -0.7174696,
+    "details": "Murcia"
+  },
+  {
+    "name": "Laredo",
+    "latitude": 43.41063,
+    "longitude": -3.4173,
+    "details": "Cantabria"
+  },
+  {
+    "name": "Las Palmas de Gran Canaria",
+    "latitude": 28.1074382,
+    "longitude": -15.562644,
+    "details": "Gran Canaria, Canarias"
+  },
+  {
+    "name": "Llanes",
+    "latitude": 43.4211205,
+    "longitude": -4.7530835,
+    "details": "Asturias"
+  },
+  {
+    "name": "Lloret de Mar",
+    "latitude": 41.6973503,
+    "longitude": 2.8392392,
+    "details": "Girona, Cataluña"
+  },
+  {
+    "name": "Los Cristianos",
+    "latitude": 28.0526298,
+    "longitude": -16.717,
+    "details": "Tenerife, Canarias"
+  },
+  {
+    "name": "Mahón",
+    "latitude": 39.8894922,
+    "longitude": 4.2662071,
+    "details": "Menorca, Islas Baleares"
+  },
+  {
+    "name": "Manacor",
+    "latitude": 39.5710273,
+    "longitude": 2.6666978,
+    "details": "Mallorca, Islas Baleares"
+  },
+  {
+    "name": "Marbella",
+    "latitude": 36.5074781,
+    "longitude": -4.8047219,
+    "details": "Málaga, Andalucía"
+  },
+  {
+    "name": "Maspalomas",
+    "latitude": 28.1176573,
+    "longitude": -15.4554137,
+    "details": "Gran Canaria, Canarias"
+  },
+  {
+    "name": "Mataró",
+    "latitude": 41.5398348,
+    "longitude": 2.4448926,
+    "details": "Barcelona, Cataluña"
+  },
+  {
+    "name": "Mazarrón",
+    "latitude": 37.5984446,
+    "longitude": -1.31515,
+    "details": "Murcia"
+  },
+  {
+    "name": "Melilla",
+    "latitude": 35.2918698,
+    "longitude": -2.9409026,
+    "details": "Melilla"
+  },
+  {
+    "name": "Moguer",
+    "latitude": 37.2746182,
+    "longitude": -6.8373527,
+    "details": "Huelva, Andalucía"
+  },
+  {
+    "name": "Mogán",
+    "latitude": 28.1074093,
+    "longitude": -15.5626748,
+    "details": "Gran Canaria, Canarias"
+  },
+  {
+    "name": "Mojácar",
+    "latitude": 37.1402087,
+    "longitude": -1.8510071,
+    "details": "Almería, Andalucía"
+  },
+  {
+    "name": "Morro Jable",
+    "latitude": 28.060681,
+    "longitude": -14.3508496,
+    "details": "Fuerteventura, Canarias"
+  },
+  {
+    "name": "Motril",
+    "latitude": 36.7450888,
+    "longitude": -3.5207655,
+    "details": "Granada, Andalucía"
+  },
+  {
+    "name": "Muxía",
+    "latitude": 43.0654819,
+    "longitude": -9.177681,
+    "details": "A Coruña, Galicia"
+  },
+  {
+    "name": "Málaga",
+    "latitude": 36.7647913,
+    "longitude": -4.4422005,
+    "details": "Málaga, Andalucía"
+  },
+  {
+    "name": "Nerja",
+    "latitude": 36.7468565,
+    "longitude": -3.8790164,
+    "details": "Málaga, Andalucía"
+  },
+  {
+    "name": "Níjar",
+    "latitude": 36.962894,
+    "longitude": -2.2063758,
+    "details": "Almería, Andalucía"
+  },
+  {
+    "name": "Oliva",
+    "latitude": 39.6657659,
+    "longitude": -0.2271367,
+    "details": "Valencia, C. Valenciana"
+  },
+  {
+    "name": "Oropesa del Mar",
+    "latitude": 40.0916608,
+    "longitude": 0.1319317,
+    "details": "Castellón, C. Valenciana"
+  },
+  {
+    "name": "Palamós",
+    "latitude": 41.8495354,
+    "longitude": 3.1278785,
+    "details": "Girona, Cataluña"
+  },
+  {
+    "name": "Palma de Mallorca",
+    "latitude": 39.5532245,
+    "longitude": 2.729031,
+    "details": "Mallorca, Islas Baleares"
+  },
+  {
+    "name": "Peñíscola",
+    "latitude": 40.3584314,
+    "longitude": 0.4080448,
+    "details": "Castellón, C. Valenciana"
+  },
+  {
+    "name": "Playa Micaela",
+    "latitude": 36.7438968,
+    "longitude": -6.42413,
+    "details": "Chipiona, Cádiz"
+  },
+  {
+    "name": "Playa de Barro",
+    "latitude": 43.4369135,
+    "longitude": -4.8261664,
+    "details": "Llanes, Asturias"
+  },
+  {
+    "name": "Playa de Bolonia",
+    "latitude": 36.0822306,
+    "longitude": -5.7640221,
+    "details": "Tarifa, Cádiz"
+  },
+  {
+    "name": "Playa de Calblanque",
+    "latitude": 37.6037145,
+    "longitude": -0.7302455,
+    "details": "Cartagena, Murcia"
+  },
+  {
+    "name": "Playa de Carnota",
+    "latitude": 42.8245164,
+    "longitude": -9.1044704,
+    "details": "La Coruña, Galicia"
+  },
+  {
+    "name": "Playa de Cofete",
+    "latitude": 28.1157159,
+    "longitude": -14.3738343,
+    "details": "Fuerteventura, Canarias"
+  },
+  {
+    "name": "Playa de Famara",
+    "latitude": 29.1258679,
+    "longitude": -13.5375368,
+    "details": "Lanzarote, Canarias"
+  },
+  {
+    "name": "Playa de Gandía",
+    "latitude": 38.9967389,
+    "longitude": -0.1615079,
+    "details": "Valencia, C. Valenciana"
+  },
+  {
+    "name": "Playa de Gulpiyuri",
+    "latitude": 43.4475759,
+    "longitude": -4.8859808,
+    "details": "Llanes, Asturias"
+  },
+  {
+    "name": "Playa de Laga",
+    "latitude": 40.53816,
+    "longitude": -3.9010128,
+    "details": "Ibarrangelu, Vizcaya"
+  },
+  {
+    "name": "Playa de Muro",
+    "latitude": 39.8093648,
+    "longitude": 3.1161319,
+    "details": "Mallorca, Baleares"
+  },
+  {
+    "name": "Playa de Mónsul",
+    "latitude": 36.7304371,
+    "longitude": -2.1454328,
+    "details": "Níjar, Almería"
+  },
+  {
+    "name": "Playa de Ondarreta",
+    "latitude": 43.31692,
+    "longitude": -2.0028543,
+    "details": "San Sebastián, Guipúzcoa"
+  },
+  {
+    "name": "Playa de Papagayo",
+    "latitude": 28.8424181,
+    "longitude": -13.7881228,
+    "details": "Lanzarote, Canarias"
+  },
+  {
+    "name": "Playa de Regla",
+    "latitude": 36.7290092,
+    "longitude": -6.4396304,
+    "details": "Chipiona, Cádiz"
+  },
+  {
+    "name": "Playa de Riazor",
+    "latitude": 43.3691443,
+    "longitude": -8.4091041,
+    "details": "La Coruña, Galicia"
+  },
+  {
+    "name": "Playa de Samil",
+    "latitude": 42.2105336,
+    "longitude": -8.7761773,
+    "details": "Vigo, Pontevedra"
+  },
+  {
+    "name": "Playa de San Juan",
+    "latitude": 38.3928982,
+    "longitude": -0.4231467,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "Playa de Ses Illetes",
+    "latitude": 38.7536961,
+    "longitude": 1.4321155,
+    "details": "Formentera, Baleares"
+  },
+  {
+    "name": "Playa de Somo",
+    "latitude": 43.4594659,
+    "longitude": -3.7314229,
+    "details": "Ribamontán al Mar, Cantabria"
+  },
+  {
+    "name": "Playa de Sotavento",
+    "latitude": 28.9525267,
+    "longitude": -13.5862617,
+    "details": "Fuerteventura, Canarias"
+  },
+  {
+    "name": "Playa de Toró",
+    "latitude": 43.4168556,
+    "longitude": -4.743056,
+    "details": "Llanes, Asturias"
+  },
+  {
+    "name": "Playa de Valdevaqueros",
+    "latitude": 36.0631202,
+    "longitude": -5.6794521,
+    "details": "Tarifa, Cádiz"
+  },
+  {
+    "name": "Playa de la Barceloneta",
+    "latitude": 41.3713457,
+    "longitude": 2.1892624,
+    "details": "Barcelona, Cataluña"
+  },
+  {
+    "name": "Playa de la Barrosa",
+    "latitude": 36.3431776,
+    "longitude": -6.1669856,
+    "details": "Chiclana, Cádiz"
+  },
+  {
+    "name": "Playa de la Caleta",
+    "latitude": 36.5284769,
+    "longitude": -6.3064967,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Playa de la Calzada",
+    "latitude": 36.7838715,
+    "longitude": -6.3574679,
+    "details": "Sanlúcar de Barrameda, Cádiz"
+  },
+  {
+    "name": "Playa de la Concha",
+    "latitude": 43.3177013,
+    "longitude": -1.9863684,
+    "details": "San Sebastián, Guipúzcoa"
+  },
+  {
+    "name": "Playa de la Malvarrosa",
+    "latitude": 39.4793904,
+    "longitude": -0.3237202,
+    "details": "Valencia, C. Valenciana"
+  },
+  {
+    "name": "Playa de la Victoria",
+    "latitude": 36.5062224,
+    "longitude": -6.2793343,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Playa de las Canteras",
+    "latitude": 36.7393731,
+    "longitude": -6.4406776,
+    "details": "Chipiona, Cádiz"
+  },
+  {
+    "name": "Playa de las Canteras",
+    "latitude": 28.1395521,
+    "longitude": -15.4366332,
+    "details": "Las Palmas, Canarias"
+  },
+  {
+    "name": "Playa de las Catedrales",
+    "latitude": 43.5543337,
+    "longitude": -7.1573791,
+    "details": "Ribadeo, Lugo"
+  },
+  {
+    "name": "Playa de las Teresitas",
+    "latitude": 28.5079321,
+    "longitude": -16.1873717,
+    "details": "Tenerife, Canarias"
+  },
+  {
+    "name": "Playa de las Tres Piedras",
+    "latitude": 36.69497,
+    "longitude": -6.4247639,
+    "details": "Chipiona, Cádiz"
+  },
+  {
+    "name": "Playa de los Genoveses",
+    "latitude": 36.7436705,
+    "longitude": -2.122024,
+    "details": "Níjar, Almería"
+  },
+  {
+    "name": "Playa de los Muertos",
+    "latitude": 36.9536403,
+    "longitude": -1.898823,
+    "details": "Carboneras, Almería"
+  },
+  {
+    "name": "Playa del Camarón",
+    "latitude": 36.7104152,
+    "longitude": -6.4340036,
+    "details": "Chipiona, Cádiz"
+  },
+  {
+    "name": "Playa del Duque",
+    "latitude": 28.0906582,
+    "longitude": -16.7412647,
+    "details": "Tenerife, Canarias"
+  },
+  {
+    "name": "Playa del Saler",
+    "latitude": 39.3826325,
+    "longitude": -0.3240496,
+    "details": "Valencia, C. Valenciana"
+  },
+  {
+    "name": "Playa del Sardinero",
+    "latitude": 43.4773258,
+    "longitude": -3.7871525,
+    "details": "Santander, Cantabria"
+  },
+  {
+    "name": "Playa del Silencio",
+    "latitude": 43.5673936,
+    "longitude": -6.294871,
+    "details": "Cudillero, Asturias"
+  },
+  {
+    "name": "Pontevedra",
+    "latitude": 42.428065,
+    "longitude": -8.6041447,
+    "details": "Pontevedra, Galicia"
+  },
+  {
+    "name": "Puerto de la Cruz",
+    "latitude": 28.4159024,
+    "longitude": -16.5532956,
+    "details": "Tenerife, Canarias"
+  },
+  {
+    "name": "Puerto del Rosario",
+    "latitude": 28.4993424,
+    "longitude": -13.8599051,
+    "details": "Fuerteventura, Canarias"
+  },
+  {
+    "name": "Punta Umbría",
+    "latitude": 37.1830237,
+    "longitude": -6.9662203,
+    "details": "Huelva, Andalucía"
+  },
+  {
+    "name": "Ribadeo",
+    "latitude": 43.511372,
+    "longitude": -7.1267022,
+    "details": "Lugo, Galicia"
+  },
+  {
+    "name": "Ribeira",
+    "latitude": 42.5778204,
+    "longitude": -9.0083426,
+    "details": "A Coruña, Galicia"
+  },
+  {
+    "name": "Rincón de la Victoria",
+    "latitude": 36.7162109,
+    "longitude": -4.2793767,
+    "details": "Málaga, Andalucía"
+  },
+  {
+    "name": "Roquetas de Mar",
+    "latitude": 36.7630203,
+    "longitude": -2.6115886,
+    "details": "Almería, Andalucía"
+  },
+  {
+    "name": "Roses",
+    "latitude": 42.2632018,
+    "longitude": 3.1755328,
+    "details": "Girona, Cataluña"
+  },
+  {
+    "name": "Rota",
+    "latitude": 36.6228636,
+    "longitude": -6.3599595,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Sagunto",
+    "latitude": 39.6756707,
+    "longitude": -0.2714149,
+    "details": "Valencia, C. Valenciana"
+  },
+  {
+    "name": "Salobreña",
+    "latitude": 36.765067,
+    "longitude": -3.5938505,
+    "details": "Granada, Andalucía"
+  },
+  {
+    "name": "Salou",
+    "latitude": 41.0768193,
+    "longitude": 1.1440411,
+    "details": "Tarragona, Cataluña"
+  },
+  {
+    "name": "San Antonio Abad",
+    "latitude": 38.9830568,
+    "longitude": 1.3009485,
+    "details": "Ibiza, Islas Baleares"
+  },
+  {
+    "name": "San Fernando",
+    "latitude": 36.4646672,
+    "longitude": -6.1983492,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "San Sebastián",
+    "latitude": 43.3224219,
+    "longitude": -1.9838889,
+    "details": "Guipúzcoa, País Vasco"
+  },
+  {
+    "name": "San Sebastián de la Gomera",
+    "latitude": 28.0940663,
+    "longitude": -17.1126482,
+    "details": "La Gomera, Canarias"
+  },
+  {
+    "name": "San Vicente de la Barquera",
+    "latitude": 43.38318,
+    "longitude": -4.40027,
+    "details": "Cantabria"
+  },
+  {
+    "name": "Sanlúcar de Barrameda",
+    "latitude": 36.7761393,
+    "longitude": -6.3534794,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Sant Carles de la Ràpita",
+    "latitude": 40.6178149,
+    "longitude": 0.5900091,
+    "details": "Tarragona, Cataluña"
+  },
+  {
+    "name": "Santa Cruz de Tenerife",
+    "latitude": 28.467178,
+    "longitude": -16.2507843,
+    "details": "Tenerife, Canarias"
+  },
+  {
+    "name": "Santa Cruz de la Palma",
+    "latitude": 28.6840051,
+    "longitude": -17.7626951,
+    "details": "La Palma, Canarias"
+  },
+  {
+    "name": "Santa Eulalia del Río",
+    "latitude": 38.9910587,
+    "longitude": 1.474252,
+    "details": "Ibiza, Islas Baleares"
+  },
+  {
+    "name": "Santa Pola",
+    "latitude": 38.1916294,
+    "longitude": -0.5627217,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "Santander",
+    "latitude": 43.4618932,
+    "longitude": -3.8100255,
+    "details": "Cantabria"
+  },
+  {
+    "name": "Sanxenxo",
+    "latitude": 42.4220772,
+    "longitude": -8.8353365,
+    "details": "Pontevedra, Galicia"
+  },
+  {
+    "name": "Sitges",
+    "latitude": 41.2353596,
+    "longitude": 1.8114102,
+    "details": "Barcelona, Cataluña"
+  },
+  {
+    "name": "Tarifa",
+    "latitude": 36.0129082,
+    "longitude": -5.6050213,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Tarragona",
+    "latitude": 41.1172364,
+    "longitude": 1.2546057,
+    "details": "Tarragona, Cataluña"
+  },
+  {
+    "name": "Torre del Mar",
+    "latitude": 36.7413845,
+    "longitude": -4.0946126,
+    "details": "Málaga, Andalucía"
+  },
+  {
+    "name": "Torremolinos",
+    "latitude": 36.6242841,
+    "longitude": -4.4995448,
+    "details": "Málaga, Andalucía"
+  },
+  {
+    "name": "Torrevieja",
+    "latitude": 38.0006217,
+    "longitude": -0.649643,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "Tossa de Mar",
+    "latitude": 41.7197773,
+    "longitude": 2.9312155,
+    "details": "Girona, Cataluña"
+  },
+  {
+    "name": "Valencia",
+    "latitude": 39.4719315,
+    "longitude": -0.4003568,
+    "details": "Valencia, C. Valenciana"
+  },
+  {
+    "name": "Valverde",
+    "latitude": 27.770617,
+    "longitude": -17.9491325,
+    "details": "El Hierro, Canarias"
+  },
+  {
+    "name": "Vejer de la Frontera",
+    "latitude": 36.251937,
+    "longitude": -5.9670492,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Vigo",
+    "latitude": 42.1986395,
+    "longitude": -8.727956,
+    "details": "Pontevedra, Galicia"
+  },
+  {
+    "name": "Vilagarcía de Arousa",
+    "latitude": 42.5950502,
+    "longitude": -8.7430537,
+    "details": "Pontevedra, Galicia"
+  },
+  {
+    "name": "Villajoyosa",
+    "latitude": 38.505272,
+    "longitude": -0.231984,
+    "details": "Alicante, C. Valenciana"
+  },
+  {
+    "name": "Vinaròs",
+    "latitude": 40.4586286,
+    "longitude": 0.446875,
+    "details": "Castellón, C. Valenciana"
+  },
+  {
+    "name": "Zahara de los Atunes",
+    "latitude": 36.1361147,
+    "longitude": -5.845594,
+    "details": "Cádiz, Andalucía"
+  },
+  {
+    "name": "Zarautz",
+    "latitude": 43.2834873,
+    "longitude": -2.1723467,
+    "details": "Guipúzcoa, País Vasco"
+  },
+  {
+    "name": "Águilas",
+    "latitude": 37.4099628,
+    "longitude": -1.5804922,
+    "details": "Murcia"
+  }
+]
