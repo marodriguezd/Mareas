@@ -85,7 +85,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=sea_level_height_msl,wave_height,wave_period&timezone=Europe%2FMadrid`;
+      const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=sea_level_height_msl,wave_height,wave_period,sea_surface_temperature&timezone=Europe%2FMadrid`;
       const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=temperature_2m,wind_speed_10m,weather_code&timezone=Europe%2FMadrid`;
 
       const [marineRes, weatherRes] = await Promise.all([
@@ -101,6 +101,7 @@ export default function App() {
       const mslHeights = marineRes.hourly.sea_level_height_msl;
       const waveHeights = marineRes.hourly.wave_height;
       const wavePeriods = marineRes.hourly.wave_period;
+      const seaTemps = marineRes.hourly.sea_surface_temperature;
       const temps = weatherRes.hourly.temperature_2m;
       const winds = weatherRes.hourly.wind_speed_10m;
       const weatherCodes = weatherRes.hourly.weather_code;
@@ -127,6 +128,7 @@ export default function App() {
           puertoHeight,
           waveHeight: waveHeights ? waveHeights[idx] || 0 : 0,
           wavePeriod: wavePeriods ? wavePeriods[idx] || 0 : 0,
+          seaTemp: seaTemps ? seaTemps[idx] || 0 : 0,
           temp: temps ? temps[idx] || 0 : 0,
           wind: winds ? winds[idx] || 0 : 0,
           weatherCode: weatherCodes ? weatherCodes[idx] || 0 : 0,
@@ -173,6 +175,7 @@ export default function App() {
         const dayExtrema = extrema.filter(ext => ext.dateKey === targetDateKey);
         const avgWave = dayHours.reduce((acc, h) => acc + h.waveHeight, 0) / dayHours.length;
         const avgWind = dayHours.reduce((acc, h) => acc + h.wind, 0) / dayHours.length;
+        const avgSeaTemp = dayHours.reduce((acc, h) => acc + h.seaTemp, 0) / dayHours.length;
         const maxTemp = Math.max(...dayHours.map(h => h.temp));
         const minTemp = Math.min(...dayHours.map(h => h.temp));
         const moon = getMoonAndTideSpecs(targetDate);
@@ -182,7 +185,7 @@ export default function App() {
           dateStr: targetDateKey,
           hours: dayHours.sort((a, b) => a.hourValue - b.hourValue),
           extrema: dayExtrema.sort((a, b) => a.time - b.time),
-          avgWave, avgWind, maxTemp, minTemp,
+          avgWave, avgWind, maxTemp, minTemp, avgSeaTemp,
           weatherCode: dayHours[12] ? dayHours[12].weatherCode : dayHours[0].weatherCode,
           moonPhase: moon.phaseName,
           moonIcon: moon.moonIcon,
@@ -385,7 +388,7 @@ export default function App() {
                         {(currentStatus.currentPoint[heightSystem === 'puerto' ? 'puertoHeight' : 'mslHeight']).toFixed(2)}
                         <span className="text-3xl font-bold text-ink/40 ml-2">m</span>
                       </p>
-                      <div className="flex items-center gap-2 text-xs font-bold">
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
                         {currentStatus.isRising ? (
                           <span className="flex items-center gap-1 px-2.5 py-1 bg-kelp/10 text-kelp rounded-full">
                             <TrendingUp className="w-3.5 h-3.5" /> Marea en Creciente
@@ -395,6 +398,9 @@ export default function App() {
                             <TrendingDown className="w-3.5 h-3.5" /> Marea en Vaciante
                           </span>
                         )}
+                        <span className="flex items-center gap-1 px-2.5 py-1 bg-foam text-marine border border-ink/5 rounded-full">
+                          <Thermometer className="w-3.5 h-3.5 text-marine" /> Temp. Agua: {currentStatus.currentPoint.seaTemp.toFixed(1)}°C
+                        </span>
                       </div>
                     </div>
 
@@ -620,17 +626,24 @@ export default function App() {
                   />
 
                   {simulatedPoint && (
-                    <div className="grid grid-cols-2 gap-4 pt-3 text-left border-t border-ink/6 mt-2">
+                    <div className="grid grid-cols-3 gap-4 pt-3 text-left border-t border-ink/6 mt-2">
                       <div>
                         <p className="text-[9px] text-ink/40 font-bold uppercase tracking-wider">Altura Estimada</p>
-                        <p className="text-base font-black text-marine">
-                          {(heightSystem === 'puerto' ? simulatedPoint.puertoHeight : simulatedPoint.mslHeight).toFixed(2)} metros
+                        <p className="text-sm font-black text-marine mt-0.5">
+                          {(heightSystem === 'puerto' ? simulatedPoint.puertoHeight : simulatedPoint.mslHeight).toFixed(2)}m
                         </p>
                       </div>
                       <div>
                         <p className="text-[9px] text-ink/40 font-bold uppercase tracking-wider">Condición Local</p>
-                        <p className="text-xs font-bold text-ink/75 mt-0.5">
-                          {simulatedPoint.temp.toFixed(1)}°C • {simulatedPoint.wind.toFixed(0)} km/h
+                        <p className="text-[11px] font-bold text-ink/75 mt-0.5 leading-tight">
+                          Aire: {simulatedPoint.temp.toFixed(1)}°C <br />
+                          Viento: {simulatedPoint.wind.toFixed(0)} km/h
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[9px] text-ink/40 font-bold uppercase tracking-wider">Temp. del Agua</p>
+                        <p className="text-sm font-black text-marine mt-0.5">
+                          {simulatedPoint.seaTemp.toFixed(1)}°C
                         </p>
                       </div>
                     </div>
@@ -728,7 +741,7 @@ export default function App() {
                 <section className="bg-white border border-ink/8 rounded-xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.01)] space-y-4">
                   <h4 className="text-xs uppercase font-extrabold tracking-widest text-ink/40 border-b border-ink/6 pb-3">Dinámica Marítima</h4>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-1 gap-4">
                     <div className="bg-mineral p-4 rounded-xl border border-ink/6 flex items-center gap-3">
                       <Waves className="w-5 h-5 text-marine shrink-0" />
                       <div>
@@ -742,6 +755,14 @@ export default function App() {
                       <div>
                         <p className="text-[9px] font-bold text-ink/40 uppercase tracking-wider">Velocidad del Viento</p>
                         <p className="text-sm font-black text-ink">{activeDay.avgWind.toFixed(0)} km/h</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-mineral p-4 rounded-xl border border-ink/6 flex items-center gap-3">
+                      <Thermometer className="w-5 h-5 text-marine shrink-0" />
+                      <div>
+                        <p className="text-[9px] font-bold text-ink/40 uppercase tracking-wider">Temp. del Agua (Media)</p>
+                        <p className="text-sm font-black text-ink">{activeDay.avgSeaTemp.toFixed(1)}°C</p>
                       </div>
                     </div>
                   </div>
