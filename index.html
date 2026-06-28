@@ -13,6 +13,13 @@
   </head>
   <body class="bg-mineral text-ink">
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx" id="vite-dev-script"></script>
+    <script>
+      // Redirección de seguridad para GitHub Pages: si se sirve el HTML sin compilar de la raíz,
+      // redirige automáticamente a la carpeta /docs/ donde reside la versión compilada y optimizada.
+      if (window.location.hostname.endsWith('github.io') && document.getElementById('vite-dev-script')) {
+        window.location.replace(window.location.pathname + (window.location.pathname.endsWith('/') ? '' : '/') + 'docs/');
+      }
+    </script>
   </body>
 </html>
