@@ -332,34 +332,20 @@ export default function App() {
       
       {/* HEADER EDITORIAL */}
       <header className="border-b border-ink/8 bg-white/80 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 bg-marine rounded-full animate-pulse"></span>
-              <h1 className="text-xl font-black uppercase tracking-tight text-ink">Costa Chipiona</h1>
-            </div>
-            <p className="text-[9px] uppercase font-bold tracking-widest text-ink/40 mt-0.5">Estación de Observación Oceanográfica y Mareas</p>
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-marine rounded-full animate-pulse"></span>
+            <h1 className="text-sm font-black uppercase tracking-tight text-ink">Costa Chipiona</h1>
           </div>
           
-          <div className="flex items-center gap-4 self-start sm:self-auto">
-            <div className="text-right hidden md:block">
-              <p className="text-[9px] font-bold text-ink/40 uppercase">Coordenadas Oficiales</p>
-              <p className="text-xs font-mono font-bold text-ink/75">36.735° N, 6.438° W</p>
+          <div className="flex items-center gap-4">
+            <div className="text-right hidden sm:block">
+              <p className="text-[9px] font-mono font-bold text-ink/40">36.735° N, 6.438° W</p>
             </div>
-            <div className="h-8 w-px bg-ink/8 hidden md:block"></div>
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono font-bold text-ink bg-mineral px-3 py-1.5 rounded-md border border-ink/6">
-                Hora Local: {formatHourString(currentStatus.time)}
-              </span>
-              <button 
-                onClick={loadData} 
-                className="p-2 text-ink/50 hover:text-ink hover:bg-mineral rounded-md border border-transparent hover:border-ink/6 transition-all"
-                title="Actualizar datos"
-                aria-label="Actualizar"
-              >
-                <RefreshCw className="w-4 h-4" />
-              </button>
-            </div>
+            <div className="h-4 w-px bg-ink/8 hidden sm:block"></div>
+            <span className="text-[10px] font-mono font-bold text-ink bg-mineral px-2.5 py-1 rounded border border-ink/6">
+              {formatHourString(currentStatus.time)}
+            </span>
           </div>
         </div>
       </header>
@@ -401,6 +387,9 @@ export default function App() {
                         <span className="flex items-center gap-1 px-2.5 py-1 bg-foam text-marine border border-ink/5 rounded-full">
                           <Thermometer className="w-3.5 h-3.5 text-marine" /> Temp. Agua: {currentStatus.currentPoint.seaTemp.toFixed(1)}°C
                         </span>
+                      </div>
+                      <div className="text-[11px] font-bold text-ink/50 mt-1 flex items-center gap-1">
+                        <Sun className="w-3.5 h-3.5 text-rust" /> Temp. Aire estimada: {currentStatus.currentPoint.temp.toFixed(1)}°C
                       </div>
                     </div>
 
