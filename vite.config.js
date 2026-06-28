@@ -8,5 +8,9 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
-  base: '/Mareas/'
+  base: '/Mareas/',
+  build: {
+    outDir: 'docs',
+    emptyOutDir: true
+  }
 })

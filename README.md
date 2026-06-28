@@ -13,27 +13,19 @@ Aplicación web interactiva para visualizar las mareas y el pronóstico marítim
 
 ## 🚀 Despliegue en GitHub Pages
 
-Este proyecto está configurado con **GitHub Actions** para compilar y desplegar automáticamente la aplicación en GitHub Pages con cada commit enviado a la rama `main`.
+Este proyecto se despliega directamente desde la carpeta `/docs` de la rama `main` en GitHub Pages.
 
-La URL de la publicación será: [https://marodriguezd.github.io/Mareas/](https://marodriguezd.github.io/Mareas/)
+### Desarrollo Local y Compilación:
 
-## 💻 Desarrollo Local
-
-Para ejecutar la aplicación localmente en tu máquina o en Termux, sigue estos pasos:
-
-### 1. Instalar dependencias
-```bash
-npm install
-```
-
-### 2. Iniciar el servidor de desarrollo
-```bash
-npm run dev
-```
-
-### 3. Compilar para producción
-```bash
-npm run build
-```
-
-Las compilaciones locales producirán un directorio `dist/` estático optimizado y listo para ser servido por cualquier servidor HTTP.
+1. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+2. Servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+3. Compilar para producción (actualiza la carpeta `/docs` para subir a GitHub Pages):
+   ```bash
+   npm run build
+   ```
